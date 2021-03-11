@@ -1,0 +1,15 @@
+---
+- name: Deploy war
+  hosts: webservers
+  become: true
+  tasks:
+    - name: Stop Tomcat
+      command: /opt/tomcat8/bin/shutdown.sh
+    - name: Delete old war
+      command: rm -rf /opt/tomcat8/webapps/myweb*
+    - name: Copy the war file
+      copy:
+        src: /var/lib/jenkins/workspace/jenkins-tomcat-deploy-prod-ansible/target/myweb.war
+        dest: /opt/tomcat8/webapps/
+    - name: Start Tomcat
+      command: /opt/tomcat8/bin/startup.sh
